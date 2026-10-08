@@ -318,7 +318,7 @@ dialog .close{all:unset;cursor:pointer;position:fixed;top:calc(16px + env(safe-a
   <div class="wrap chapter-body">
     <div class="facts">
       <div><b>3</b><span>مناطق جلوس مستقلة</span></div>
-      <div><b>40</b><span>ضيفاً بأريحية تامة</span></div>
+      <div><b>30</b><span>ضيفاً بأريحية تامة</span></div>
       <div><b class="num">2,200</b><span>ريال للساعة</span></div>
       <div><b>4 س</b><span>الحد الأدنى للحجز</span></div>
     </div>
@@ -329,9 +329,9 @@ dialog .close{all:unset;cursor:pointer;position:fixed;top:calc(16px + env(safe-a
       <li>طاقم ملاحي محترف طوال الرحلة.</li>
     </ul>
     <div class="zones" aria-label="توزيع الجلوس">
-      <div><b>المنطقة الأولى</b><div class="seats" data-n="20"></div></div>
-      <div><b>المنطقة الثانية</b><div class="seats" data-n="20"></div></div>
-      <div><b>المنطقة الثالثة</b><div class="seats" data-n="20"></div></div>
+      <div><b>المنطقة الأولى</b><div class="seats" data-n="10"></div></div>
+      <div><b>المنطقة الثانية</b><div class="seats" data-n="10"></div></div>
+      <div><b>المنطقة الثالثة</b><div class="seats" data-n="10"></div></div>
     </div>
     <div class="gallery tania-g" id="tania-gallery"><button class="g1" type="button"><img src="images/tania/1.webp" alt="اليخت الإيطالي تانيا من الخارج" loading="lazy"></button><button class="g2" type="button"><img src="images/tania/2.webp" alt="جلسات اليخت تانيا" loading="lazy"></button><button class="g3" type="button"><img src="images/tania/3.webp" alt="منطقة جلوس في اليخت تانيا" loading="lazy"></button><button class="g4" type="button"><img src="images/tania/4.webp" alt="سطح اليخت تانيا" loading="lazy"></button><button class="g5" type="button"><img src="images/tania/5.webp" alt="اليخت تانيا في البحر" loading="lazy"></button><button class="g6" type="button"><img src="images/tania/6.webp" alt="صالون اليخت تانيا" loading="lazy"></button><button class="g7" type="button"><img src="images/tania/7.webp" alt="جلسة خارجية في اليخت تانيا" loading="lazy"></button><button class="g8" type="button"><img src="images/tania/8.webp" alt="إطلالة من اليخت تانيا" loading="lazy"></button><button class="g9" type="button"><img src="images/tania/9.webp" alt="تفاصيل اليخت تانيا" loading="lazy"></button></div>
   </div>
@@ -373,7 +373,7 @@ dialog .close{all:unset;cursor:pointer;position:fixed;top:calc(16px + env(safe-a
 (function(){
   const PKG={
     aqua:{name:"الباقة الملكية الفاخرة · يخت أكوا",short:"يخت أكوا",maxG:120,hours:false,yacht:()=>19500,yLabel:"إيجار يخت أكوا بالكامل مع طاقم ملاحي محترف"},
-    tania:{name:"الباقة الاقتصادية المميزة · اليخت الإيطالي تانيا",short:"اليخت الإيطالي تانيا",maxG:40,hours:true,yacht:h=>2200*h,yLabel:"إيجار اليخت الإيطالي تانيا بالكامل مع طاقم ملاحي محترف"}
+    tania:{name:"الباقة الاقتصادية المميزة · اليخت الإيطالي تانيا",short:"اليخت الإيطالي تانيا",maxG:30,hours:true,yacht:h=>2200*h,yLabel:"إيجار اليخت الإيطالي تانيا بالكامل مع طاقم ملاحي محترف"}
   };
   const BASE_G=40, EXTRA=300, VAT=.15;
   const st={pkg:"aqua",guests:40,hours:4,vat:true};
@@ -385,8 +385,8 @@ dialog .close{all:unset;cursor:pointer;position:fixed;top:calc(16px + env(safe-a
     const p=PKG[pkg], h=p.hours?hours:4, g=Math.min(guests,p.maxG);
     const lines=[
       {t:p.yLabel,d:h+" ساعات"+(p.hours?" × 2,200 ريال":""),v:p.yacht(h)},
-      {t:"بوفيه مفتوح فاخر من مطعم القلزم",d:"مأكولات بحرية ومشويات مشكلة · لـ 40 شخصاً",v:10000},
-      {t:"بكج مشروبات وضيافة متكاملة طوال الرحلة",d:"50 ريال للشخص · لـ 40 شخصاً",v:2000},
+      {t:"بوفيه مفتوح فاخر من مطعم القلزم",d:"مأكولات بحرية ومشويات مشكلة"+(p.hours?"":" · لـ 40 شخصاً"),v:10000},
+      {t:"بكج مشروبات وضيافة متكاملة طوال الرحلة",d:p.hours?"لجميع الضيوف طوال الرحلة":"50 ريال للشخص · لـ 40 شخصاً",v:2000},
       {t:"طاقم خدمة مخصص للإشراف على البوفيه والضيافة",d:"طاقم كامل",v:2000}
     ];
     if(g>BASE_G) lines.push({t:"ضيوف إضافيون (بوفيه ومشروبات)",d:(g-BASE_G)+" × 300 ريال",v:(g-BASE_G)*EXTRA,extra:true});
@@ -396,12 +396,13 @@ dialog .close{all:unset;cursor:pointer;position:fixed;top:calc(16px + env(safe-a
 
   function render(){
     const p=PKG[st.pkg];
-    st.guests=Math.min(Math.max(st.guests,BASE_G),p.maxG);
+    const minG=Math.min(BASE_G,p.maxG);
+    st.guests=Math.min(Math.max(st.guests,minG),p.maxG);
     document.querySelectorAll(".pkg").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.pkg===st.pkg)));
-    const gr=$("guests"); gr.max=p.maxG; gr.value=st.guests; gr.disabled=p.maxG===BASE_G;
+    const gr=$("guests"); gr.min=minG; gr.max=p.maxG; gr.value=st.guests; gr.disabled=p.maxG<=BASE_G;
     $("g-val").textContent=st.guests;
-    $("g-minus").disabled=st.guests<=BASE_G; $("g-plus").disabled=st.guests>=p.maxG;
-    $("g-hint").textContent=st.pkg==="tania"?"يستوعب اليخت الإيطالي 40 ضيفاً كحد أقصى (3 مناطق × 20).":"الباقة تشمل 40 شخصاً، وكل شخص إضافي بـ 300 ريال.";
+    $("g-minus").disabled=st.guests<=minG; $("g-plus").disabled=st.guests>=p.maxG;
+    $("g-hint").textContent=st.pkg==="tania"?"يستوعب اليخت الإيطالي 30 ضيفاً كحد أقصى (3 مناطق × 10).":"الباقة تشمل 40 شخصاً، وكل شخص إضافي بـ 300 ريال.";
     const hr=$("hours"); hr.disabled=!p.hours; hr.value=p.hours?st.hours:4;
     const h=p.hours?st.hours:4;
     $("h-val").textContent=h+" ساعات";
